@@ -22,10 +22,29 @@ const { NotImplementedError } = require('../extensions/index.js');
  * }
  *
  */
-function getDNSStats(/* domains */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function getDNSStats(domains ) {
+  const result = {}; // Храним результат
+
+  domains.forEach(domain => {
+    // Разбиваем домен на части
+    const domainParts = domain.split('.').reverse(); // Разделяем домен по точкам и инвертируем
+  
+    let dnsSubdomain = ''; // Переменная для формирования подстроки
+  
+    // Перебираем части домена в обратном порядке
+    domainParts.forEach((part, index) => {
+      // Формируем подстроку с точками в правильном порядке
+      dnsSubdomain = `.${part}${dnsSubdomain}`;
+  
+      // Добавляем в результат
+      result[dnsSubdomain] = (result[dnsSubdomain] || 0) + 1;
+    });
+  });
+  
+  return result;
 }
+
+
 
 module.exports = {
   getDNSStats
