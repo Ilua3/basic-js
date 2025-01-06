@@ -23,20 +23,15 @@ const { NotImplementedError } = require('../extensions/index.js');
  *
  */
 function getDNSStats(domains ) {
-  const result = {}; // Храним результат
+  const result = {}; 
 
   domains.forEach(domain => {
-    // Разбиваем домен на части
-    const domainParts = domain.split('.').reverse(); // Разделяем домен по точкам и инвертируем
+    const domainParts = domain.split('.').reverse(); 
   
-    let dnsSubdomain = ''; // Переменная для формирования подстроки
+    let dnsSubdomain = '';
   
-    // Перебираем части домена в обратном порядке
     domainParts.forEach((part, index) => {
-      // Формируем подстроку с точками в правильном порядке
       dnsSubdomain = `.${part}${dnsSubdomain}`;
-  
-      // Добавляем в результат
       result[dnsSubdomain] = (result[dnsSubdomain] || 0) + 1;
     });
   });

@@ -20,13 +20,66 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor(direct = true) {
+    this.direct = direct;
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+
+  encrypt(message, key) {
+    if (!message || !key) {
+      throw new Error('Invalid arguments');
+    }
+
+    message = message.toUpperCase();
+    key = key.toUpperCase();
+
+    let encryptedMessage = '';
+    let keyIndex = 0;
+
+    for (let i = 0; i < message.length; i++) {
+      const char = message[i];
+      
+      if (/[A-Z]/.test(char)) {
+        const charCode = char.charCodeAt(0);
+        const keyCharCode = key[keyIndex % key.length].charCodeAt(0);
+        const encryptedChar = String.fromCharCode((charCode - 65 + keyCharCode - 65) % 26 + 65);
+        encryptedMessage += encryptedChar;
+
+        keyIndex++;
+      } else {
+        encryptedMessage += char;
+      }
+    }
+
+    return this.direct ? encryptedMessage : encryptedMessage.split('').reverse().join('');
+  }
+
+  decrypt(message, key) {
+    if (!message || !key) {
+      throw new Error('Invalid arguments');
+    }
+
+    message = message.toUpperCase();
+    key = key.toUpperCase();
+
+    let decryptedMessage = '';
+    let keyIndex = 0;
+
+    for (let i = 0; i < message.length; i++) {
+      const char = message[i];
+      
+      if (/[A-Z]/.test(char)) {
+        const charCode = char.charCodeAt(0);
+        const keyCharCode = key[keyIndex % key.length].charCodeAt(0);
+        const decryptedChar = String.fromCharCode((charCode - 65 - (keyCharCode - 65) + 26) % 26 + 65);
+        decryptedMessage += decryptedChar;
+
+        keyIndex++;
+      } else {
+        decryptedMessage += char;
+      }
+    }
+
+    return this.direct ? decryptedMessage : decryptedMessage.split('').reverse().join('');
   }
 }
 
